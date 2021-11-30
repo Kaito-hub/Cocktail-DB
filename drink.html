@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="drinkcss.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="img"></div>
+      <div class="info">
+        <h1 id="name">Margarita</h1>
+        <p id="alcoholic">Alcoholic?</p>
+        <h3 id="instructions">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet consequatur est fuga quae sit facilis.</h3>
+
+        <ul id="ingredients"></ul>
+      </div>
+    </div>
+    <a href="index.html">Back</a>
+  </body>
+  <script>
+    const name = document.getElementById("name");
+    const alcoholic = document.getElementById("alcoholic");
+    const instructions = document.getElementById("instructions");
+    const ingredients = document.getElementById("ingredients");
+    const img = document.querySelector(".img");
+    const drinks = new URLSearchParams(window.location.search);
+    name.textContent = drinks.get("strDrink");
+    alcoholic.textContent = drinks.get("strAlcoholic");
+    instructions.textContent = drinks.get("strInstructions");
+    img.innerHTML = `<img src="${drinks.get("strDrinkThumb")}" alt="" />`;
+
+    index = 1;
+    drinks.forEach((value, name) => {
+      if (name.includes("strIngredient") && value !== "null") {
+        // console.log(`${name}:${value}`);
+        console.log(drinks.get("strMeasure1"));
+        ingredients.innerHTML += `<li>${value} <span>${drinks.get("strMeasure" + index)}</span></li>`;
+        index++;
+      }
+
+      console.log(`${name}:${value}`);
+    });
+  </script>
+</html>
