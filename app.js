@@ -2,6 +2,7 @@ import fetchCocktails from "./data.js";
 
 const searchEl = document.getElementById("search");
 const container = document.querySelector(".container");
+const loader = document.querySelector(".loader");
 
 window.addEventListener("load", () => {
   fetchDrinks("a");
@@ -14,6 +15,7 @@ searchEl.addEventListener("input", () => {
 async function fetchDrinks(drink) {
   container.children[0].innerHTML = "";
   let drinkName = await fetchCocktails(drink);
+  loader.innerHTML = "";
   newCard(drinkName.drinks);
 }
 
@@ -37,8 +39,8 @@ function newCard(drinks) {
   const drink = row.querySelectorAll(".article");
   drink.forEach((card, index) => {
     card.addEventListener("click", () => {
-      console.log(drinks[index]);
-      const clickedDrink = drinks[index];
+      // console.log({ idDrink: drinks[index].idDrink });
+      const clickedDrink = { idDrink: drinks[index].idDrink };
       const usp = new URLSearchParams(clickedDrink);
       window.location.href = `drink.html?${usp}`;
     });

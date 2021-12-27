@@ -6,42 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="drinkcss.css" />
+    <script></script>
   </head>
   <body>
+    <div class="loader">
+      <div class="lds-dual-ring"></div>
+    </div>
     <div class="container">
       <div class="img"></div>
       <div class="info">
-        <h1 id="name">Margarita</h1>
-        <p id="alcoholic">Alcoholic?</p>
-        <h3 id="instructions">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet consequatur est fuga quae sit facilis.</h3>
+        <h1 id="name"></h1>
+        <p id="alcoholic"></p>
+        <h3 id="instructions"></h3>
 
         <ul id="ingredients"></ul>
       </div>
     </div>
     <a href="index.html">Back</a>
   </body>
-  <script>
+  <script type="module">
+    import { drinksById } from "./data.js";
+
+    const container = document.querySelector(".container");
+    const loader = document.querySelector(".loader");
     const name = document.getElementById("name");
     const alcoholic = document.getElementById("alcoholic");
     const instructions = document.getElementById("instructions");
     const ingredients = document.getElementById("ingredients");
     const img = document.querySelector(".img");
-    const drinks = new URLSearchParams(window.location.search);
-    name.textContent = drinks.get("strDrink");
-    alcoholic.textContent = drinks.get("strAlcoholic");
-    instructions.textContent = drinks.get("strInstructions");
-    img.innerHTML = `<img src="${drinks.get("strDrinkThumb")}" alt="" />`;
 
-    index = 1;
-    drinks.forEach((value, name) => {
-      if (name.includes("strIngredient") && value !== "null") {
-        // console.log(`${name}:${value}`);
-        console.log(drinks.get("strMeasure1"));
-        ingredients.innerHTML += `<li>${value} <span>${drinks.get("strMeasure" + index)}</span></li>`;
+    const drinks = new URLSearchParams(window.location.search);
+
+    const drinkId = drinks.get("idDrink");
+    const drinkFetch = await drinksById(drinkId);
+
+    loader.parentElement.removeChild(loader);
+
+    const drink = drinkFetch.drinks[0];
+
+    name.textContent = drink.strDrink;
+
+    alcoholic.textContent = drink.strAlcoholic;
+    instructions.textContent = drink.strInstructions;
+    img.innerHTML = `<img src="${drink.strDrinkThumb}" alt="" />`;
+
+    let index = 1;
+
+    Object.keys(drink).forEach((name) => {
+      if (drink["strIngredient" + index]) {
+        ingredients.innerHTML += `<li>${drink["strIngredient" + index]} <span>${drink["strMeasure" + index]}</span></li>`;
         index++;
       }
-
-      console.log(`${name}:${value}`);
     });
   </script>
 </html>
